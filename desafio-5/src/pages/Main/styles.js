@@ -31,6 +31,14 @@ export const Form = styled.form`
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 16px;
+
+    &.error {
+      border: 2px solid #e22;
+    }
+
+    &.default {
+      border: 2px solid #ddd;
+    }
   }
 `;
 
@@ -57,6 +65,14 @@ export const SubmitButton = styled.button.attrs(props => ({
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &.error {
+    background: #e22;
+  }
+
+  &.default {
+    background: #7159c1;
+  }
 
   &[disabled] {
     cursor: not-allowed;

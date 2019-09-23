@@ -121,3 +121,33 @@ export const IssueList = styled.ul`
     }
   }
 `;
+
+export const StateInput = styled.input`
+  flex: 1;
+  border: 2px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+`;
+
+export const SubmitButton = styled.button.attrs(props => ({
+  stype: 'submit',
+  disabled: props.loading,
+}))`
+  min-height: 30px;
+  color: #fff;
+  background: #7159c1;
+  border: 0;
+  padding: 10px 15px;
+  margin-left: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+`;

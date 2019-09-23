@@ -10,6 +10,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    error: false,
   };
 
   componentDidMount() {
@@ -33,27 +34,39 @@ export default class Main extends Component {
   };
 
   handleSubmit = async e => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    this.setState({ loading: true });
+      this.setState({ loading: true, error: false });
 
-    const { newRepo, repositories } = this.state;
+      const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+      const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const data = {
+        name: response.data.full_name,
+      };
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      this.state.repositories.map(el => {
+        if (el.name === data.name) {
+          throw new Error('Duplicated Repository');
+        }
+        return false;
+      });
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+      });
+    } catch (e) {
+      this.setState({ loading: false, error: true });
+      console.log(e);
+    }
   };
 
   render() {
-    const { newRepo, loading, repositories } = this.state;
+    const { error, newRepo, loading, repositories } = this.state;
 
     return (
       <Container>
@@ -68,9 +81,13 @@ export default class Main extends Component {
             placeholder="Adicionar repositório"
             value={newRepo}
             onChange={this.handleInputChange}
+            className={error ? 'error' : 'default'}
           />
 
-          <SubmitButton loading={loading}>
+          <SubmitButton
+            loading={loading}
+            className={error ? 'error' : 'default'}
+          >
             {loading ? (
               <FaSpinner color="#fff" size={14} />
             ) : (
